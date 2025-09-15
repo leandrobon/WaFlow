@@ -1,0 +1,100 @@
+{
+  "Version": 1,
+  "Hash": "V8D5Rl16cuJqT1PKHmpg3BW2QDlNPaMNaMW18cizD5I=",
+  "Source": "WAFlow.Chat",
+  "BasePath": "_content/WAFlow.Chat",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\EchoBot.Example\\EchoBot.Example.csproj",
+      "Version": 2,
+      "Source": "EchoBot.Example",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    },
+    {
+      "Identity": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Simulator\\WAFlow.Simulator.csproj",
+      "Version": 2,
+      "Source": "WAFlow.Simulator",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WAFlow.Chat\\wwwroot",
+      "Source": "WAFlow.Chat",
+      "ContentRoot": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\wwwroot\\",
+      "BasePath": "_content/WAFlow.Chat",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\bundle\\WAFlow.Chat.styles.css",
+      "SourceId": "WAFlow.Chat",
+      "SourceType": "Computed",
+      "ContentRoot": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "BasePath": "_content/WAFlow.Chat",
+      "RelativePath": "WAFlow.Chat.styles.css",
+      "AssetKind": "All",
+      "AssetMode": "CurrentProject",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ApplicationBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\bundle\\WAFlow.Chat.styles.css"
+    },
+    {
+      "Identity": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\WAFlow.Chat.bundle.scp.css",
+      "SourceId": "WAFlow.Chat",
+      "SourceType": "Computed",
+      "ContentRoot": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "BasePath": "_content/WAFlow.Chat",
+      "RelativePath": "WAFlow.Chat.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\WAFlow.Chat.bundle.scp.css"
+    },
+    {
+      "Identity": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\wwwroot\\app.css",
+      "SourceId": "WAFlow.Chat",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\wwwroot\\",
+      "BasePath": "_content/WAFlow.Chat",
+      "RelativePath": "app.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.css"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\WAFlow.Chat.bundle.scp.css",
+      "PackagePath": "staticwebassets\\WAFlow.Chat.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\JetBrainsProyects\\WhatsappSim\\WebApplication1\\WAFlow.Chat\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WAFlow.Chat.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WAFlow.Chat.props",
+      "PackagePath": "build\\WAFlow.Chat.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WAFlow.Chat.props",
+      "PackagePath": "buildMultiTargeting\\WAFlow.Chat.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WAFlow.Chat.props",
+      "PackagePath": "buildTransitive\\WAFlow.Chat.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,58 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@inject Services.IChatBackend Chat
+
+<PageTitle>WaFlow Chat</PageTitle>
+
+<div class="chatbox">
+    @foreach (var m in _feed)
+    {
+        <div class="row @(m.Direction == WAFlow.Chat.Models.Direction.Outbound ? "bot" : "user")">
+            <div class="bubble">@m.Body</div>
+            <div class="meta">@m.Timestamp.ToLocalTime()</div>
+        </div>
+    }
+</div>
+<div class="inputrow">
+    <input @bind="_text" @bind:event="oninput" @onkeydown="HandleKey" placeholder="Escribí un mensaje..." />
+    <button @onclick="Send">Send</button>
+</div>
+<div class="toolbar" style="margin:10px 0; display:flex; gap:8px;">
+    <a class="btn" href="@($"/export?userId={_userId}")">Exportar (.json)</a>
+</div>
+@code{
+    private string _text = string.Empty;
+    private List<Models.Message> _feed = new();
+    private string _userId = "user-001"; // fixed now, should be made dynamic
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Chat.OnMessage += OnIncoming;
+        await Chat.InitializeAsync();
+        _feed = Chat.Feed.ToList();
+    }
+
+
+    private async Task Send()
+    {
+        Console.WriteLine("Boton");
+        if (string.IsNullOrWhiteSpace(_text)) return;
+        var t = _text;
+        _text = string.Empty;
+        await Chat.SendFromUserAsync(t);
+    }
+
+    private void HandleKey(KeyboardEventArgs e)
+    {
+        if (e.Key is "Enter") _ = Send();
+    }
+
+    private void OnIncoming(WAFlow.Chat.Models.Message m)
+    {
+        _feed.Add(m);
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose() => Chat.OnMessage -= OnIncoming;
+}
