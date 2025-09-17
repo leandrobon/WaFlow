@@ -45,3 +45,4 @@ D:\JetBrainsProyects\WhatsappSim\WebApplication1\WAFlow.Chat\obj\Debug\net8.0\re
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\WAFlow.Chat\obj\Debug\net8.0\WAFlow.Chat.pdb
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\WAFlow.Chat\obj\Debug\net8.0\WAFlow.Chat.genruntimeconfig.cache
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\WAFlow.Chat\obj\Debug\net8.0\ref\WAFlow.Chat.dll
+D:\JetBrainsProyects\WhatsappSim\WebApplication1\WAFlow.Chat\obj\Debug\net8.0\WAFlow.Chat.sourcelink.json

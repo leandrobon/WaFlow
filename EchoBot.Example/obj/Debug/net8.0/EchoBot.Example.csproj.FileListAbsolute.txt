@@ -31,3 +31,4 @@ D:\JetBrainsProyects\WhatsappSim\WebApplication1\EchoBot.Example\obj\Debug\net8.
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\EchoBot.Example\obj\Debug\net8.0\EchoBot.Example.pdb
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\EchoBot.Example\obj\Debug\net8.0\EchoBot.Example.genruntimeconfig.cache
 D:\JetBrainsProyects\WhatsappSim\WebApplication1\EchoBot.Example\obj\Debug\net8.0\ref\EchoBot.Example.dll
+D:\JetBrainsProyects\WhatsappSim\WebApplication1\EchoBot.Example\obj\Debug\net8.0\EchoBot.Example.sourcelink.json
