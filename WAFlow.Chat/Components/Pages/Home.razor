@@ -36,7 +36,9 @@
 
     <div class="toolbar">
         <a class="btn-secondary" href="@($"/export?userId={_userId}")">Export (.json)</a>
+        <button class="btn-secondary" @onclick="ResetMessages">Reset Messages</button>
     </div>
+        
 </div>
 
 @code{
@@ -58,6 +60,13 @@
         _text = string.Empty;
         await Chat.SendFromUserAsync(t);
     }
+    
+    private async Task ResetMessages()
+    {
+        await Chat.ResetAsync();
+        _feed.Clear();             
+        StateHasChanged();  
+    }
 
     private void HandleKey(KeyboardEventArgs e)
     {
@@ -69,7 +78,7 @@
         _feed.Add(m);
         InvokeAsync(StateHasChanged);
     }
-
+    
     public void Dispose() => Chat.OnMessage -= OnIncoming;
 }
 

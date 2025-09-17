@@ -92,7 +92,7 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
         var resp = await _http.DeleteAsync($"/messages", ct);
         resp.EnsureSuccessStatusCode();
 
-        // limpiar estado local para que no re-aparezca nada
+        // clean local state so nothing reappears
         _feed.Clear();
         _lastCount = 0;
     }
