@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WAFlow.Chat")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb81eadbd72ebe5c47989656ce51eb4943046a17")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81386a53b496d82a6dec8a271dd3bdd02d3b9fda")]
 [assembly: System.Reflection.AssemblyProductAttribute("WAFlow.Chat")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WAFlow.Chat")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

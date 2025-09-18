@@ -1,14 +1,12 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.Forms
 @implements IDisposable
 @inject Services.IChatBackend Chat
 
 
 <div class="chat-wrap">
     <h1>WaFlow Chat</h1>
-    <div class="status-banner @(online ? "online" : "offline")">
-        @(online ? "Simulator ONLINE" : "Simulator OFFLINE — reconnecting…")
+    <div class="status-banner @(_online ? "online" : "offline")">
+        @(_online ? "Simulator ONLINE" : "Simulator OFFLINE — reconnecting…")
     </div>
     <div class="chatbox">
         @foreach (var m in _feed)
@@ -33,7 +31,7 @@
 
         <button class="btn-send"
                 @onclick="Send"
-                disabled="@(!online || string.IsNullOrWhiteSpace(_text))">
+                disabled="@(!_online || string.IsNullOrWhiteSpace(_text))">
             Send
         </button>
     </div>
@@ -47,6 +45,16 @@
                    OnChange="OnImportReplay"
                    accept=".json" />
     </div>
+
+    <div class="logs">
+        <div class="logs-header">Logs</div>
+        <div class="logs-body">
+            @foreach (var line in Enumerable.Reverse(_logs))
+            {
+                <div class="log-line">@line</div>
+            }
+        </div>
+    </div>
         
 </div>
 
@@ -55,20 +63,27 @@
     private List<Models.Message> _feed = new();
     private Services.ReplayMessages? _replay;
     private string _userId = "user-001"; // fixed now, should be made dynamic
-    private bool online;
+    private bool _online;
+    private readonly List<string> _logs = new();
+   
     protected override async Task OnInitializedAsync()
     {
         Chat.OnMessage += OnIncoming;
         Chat.OnlineChanged += HandleOnlineChanged; 
-        online = Chat.IsOnline;
+        _online = Chat.IsOnline;
+        
+        Log("Init UI");
         await Chat.InitializeAsync();
         _feed = Chat.Feed.ToList();
         _replay = new Services.ReplayMessages(Chat);
+        Log($"Initial load: {_feed.Count} messages");
+
     }
 
     private void HandleOnlineChanged(bool isOnline) 
     {
-        online = isOnline;
+        Log(isOnline ? "Simulator ONLINE" : "Simulator OFFLINE");
+        _online = isOnline;
         InvokeAsync(StateHasChanged);
     }
     
@@ -77,13 +92,23 @@
         if (string.IsNullOrWhiteSpace(_text)) return;
         var t = _text;
         _text = string.Empty;
-        await Chat.SendFromUserAsync(t);
+        Log($"Send (user): {t}");
+        try
+        {
+            await Chat.SendFromUserAsync(t);
+        }
+        catch (Exception ex)
+        {
+            Log($"Send ERROR: {ex.Message}");
+        }
     }
     
     private async Task ResetMessages()
     {
+        Log("Reset requested");
         await Chat.ResetAsync();
-        _feed.Clear();             
+        _feed.Clear();         
+        Log("Reset done (local cleared)");
         StateHasChanged();  
     }
 
@@ -95,14 +120,15 @@
     private void OnIncoming(Models.Message m)
     {
         _feed.Add(m);
+        Log($"Recv ({m.Direction}): {m.Body}");
         InvokeAsync(StateHasChanged);
     }
     
     private async Task OnImportReplay(InputFileChangeEventArgs e)
     {
-        Console.WriteLine("entra a import");
+        Log("Import started");
         if (_replay is null) return;
-        using var stream = e.File.OpenReadStream(20_000_000);
+        await using var stream = e.File.OpenReadStream(20_000_000);
         await _replay.StartFromStreamAsync(stream, new Services.ReplayOptions
         {
             GateOnReply = true,        
@@ -110,6 +136,7 @@
             RespectUserGaps = false,   
             Speed = 1.0
         });
+        Log("Import finished");
     }
 
 
@@ -119,6 +146,15 @@
         Chat.OnlineChanged -= HandleOnlineChanged;
         _ = _replay?.DisposeAsync();
     } 
+    
+    private void Log(string msg)
+    {
+        var line = $"[{DateTime.Now:HH:mm:ss}] {msg}";
+        _logs.Add(line);
+        const int MAX = 200;
+        if (_logs.Count > MAX) _logs.RemoveRange(0, _logs.Count - MAX);
+        Console.WriteLine(line); // log a consola también
+    }
 }
 
 <style>
