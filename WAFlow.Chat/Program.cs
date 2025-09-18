@@ -1,18 +1,27 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WAFlow.Chat.Components;
 using WAFlow.Chat.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<SimulatorOptions>(
+    builder.Configuration.GetSection("Simulator"));
 
-//simulator url
-var baseUrl = builder.Configuration["Simulator:BaseUrl"] ?? "http://localhost:5080";
+builder.Services.AddHttpClient("sim", (sp, http) =>
+{
+    var opt = sp.GetRequiredService<IOptions<SimulatorOptions>>().Value;
 
-// Add services to the container.
+    // Normalize to avoid "http://...//api"
+    var baseUrl = opt.BaseUrl?.TrimEnd('/') ?? "http://localhost:5080";
+    http.BaseAddress = new Uri(baseUrl + "/");
+    http.Timeout = TimeSpan.FromSeconds(10);
+});
+
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddHttpClient("sim", c => c.BaseAddress = new Uri(baseUrl));
 builder.Services.AddSingleton<IChatBackend, SimulatorHttpBackend>();
 
 var app = builder.Build();
@@ -26,7 +35,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 

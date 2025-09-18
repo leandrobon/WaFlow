@@ -7,6 +7,9 @@
 
 <div class="chat-wrap">
     <h1>WaFlow Chat</h1>
+    <div class="status-banner @(online ? "online" : "offline")">
+        @(online ? "Simulator ONLINE" : "Simulator OFFLINE — reconnecting…")
+    </div>
     <div class="chatbox">
         @foreach (var m in _feed)
         {
@@ -30,7 +33,7 @@
 
         <button class="btn-send"
                 @onclick="Send"
-                disabled="@string.IsNullOrWhiteSpace(_text)">
+                disabled="@(!online || string.IsNullOrWhiteSpace(_text))">
             Send
         </button>
     </div>
@@ -52,15 +55,23 @@
     private List<Models.Message> _feed = new();
     private Services.ReplayMessages? _replay;
     private string _userId = "user-001"; // fixed now, should be made dynamic
-
+    private bool online;
     protected override async Task OnInitializedAsync()
     {
         Chat.OnMessage += OnIncoming;
+        Chat.OnlineChanged += HandleOnlineChanged; 
+        online = Chat.IsOnline;
         await Chat.InitializeAsync();
         _feed = Chat.Feed.ToList();
         _replay = new Services.ReplayMessages(Chat);
     }
 
+    private void HandleOnlineChanged(bool isOnline) 
+    {
+        online = isOnline;
+        InvokeAsync(StateHasChanged);
+    }
+    
     private async Task Send()
     {
         if (string.IsNullOrWhiteSpace(_text)) return;
@@ -105,6 +116,7 @@
     public void Dispose()
     {
         Chat.OnMessage -= OnIncoming;
+        Chat.OnlineChanged -= HandleOnlineChanged;
         _ = _replay?.DisposeAsync();
     } 
 }

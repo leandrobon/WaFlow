@@ -31,8 +31,9 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
     private readonly List<Message> _feed = new();
     private Timer? _timer;
     private int _lastCount = 0;
+    private bool _isOnline;
 
-    // un único usuario simulado por ahora
+    // one unique simulated user for now
     private readonly string _userId = "user-001";
 
     public SimulatorHttpBackend(IHttpClientFactory f)
@@ -46,20 +47,30 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
 
     public async Task InitializeAsync(CancellationToken ct = default)
     {
-        var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json, ct)
-                   ?? new List<SimMessageDto>();
+        try
+        {
+            var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json, ct)
+                       ?? new List<SimMessageDto>();
 
-        _feed.Clear();
-        foreach (var d in list) _feed.Add(Map(d));
-        _lastCount = _feed.Count;
+            _feed.Clear();
+            foreach (var d in list) _feed.Add(Map(d));
+            _lastCount = _feed.Count;
 
-        // polling liviano (luego lo cambiamos por SignalR /stream)
+            IsOnline = true; 
+        }
+        catch
+        {
+            IsOnline = false; 
+        }
+
+        // light polling (later migrate to SignalR /stream)
         _timer ??= new Timer(async _ => await Poll(), null, 400, 400);
     }
 
     public async Task SendFromUserAsync(string text, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(text)) return;
+        if (!IsOnline) throw new InvalidOperationException("Simulator offline.");
 
         var payload = new SimulateUserInputDto { UserId = _userId, Text = text };
         var resp = await _http.PostAsJsonAsync("/simulate/user", payload, _json, ct);
@@ -73,6 +84,8 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
             var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json)
                        ?? new List<SimMessageDto>();
 
+            if (!IsOnline) IsOnline = true;
+
             if (list.Count > _lastCount)
             {
                 foreach (var d in list.Skip(_lastCount))
@@ -81,10 +94,14 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
                     _feed.Add(m);
                     OnMessage?.Invoke(m);
                 }
+
                 _lastCount = list.Count;
             }
         }
-        catch { /* ok en dev si el simulator no está */ }
+        catch
+        {
+            if (IsOnline) IsOnline = false;
+        }
     }
     
     public async Task ResetAsync(CancellationToken ct = default)
@@ -110,4 +127,19 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
         _timer?.Dispose();
         return ValueTask.CompletedTask;
     }
+    
+    public bool IsOnline
+    {
+        get => _isOnline;
+        private set
+        {
+            if (_isOnline != value)
+            {
+                _isOnline = value;
+                OnlineChanged?.Invoke(value);
+            }
+        }
+    }
+
+    public event Action<bool>? OnlineChanged;
 }
