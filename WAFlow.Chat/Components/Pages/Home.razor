@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
 @implements IDisposable
 @inject Services.IChatBackend Chat
 
@@ -37,6 +38,11 @@
     <div class="toolbar">
         <a class="btn-secondary" href="@($"/export?userId={_userId}")">Export (.json)</a>
         <button class="btn-secondary" @onclick="ResetMessages">Reset Messages</button>
+        <label for="fileImport" class="btn-secondary">Import (.json)</label>
+        <InputFile id="fileImport"
+                   class="file-hidden"
+                   OnChange="OnImportReplay"
+                   accept=".json" />
     </div>
         
 </div>
@@ -44,6 +50,7 @@
 @code{
     private string _text = string.Empty;
     private List<Models.Message> _feed = new();
+    private Services.ReplayMessages? _replay;
     private string _userId = "user-001"; // fixed now, should be made dynamic
 
     protected override async Task OnInitializedAsync()
@@ -51,6 +58,7 @@
         Chat.OnMessage += OnIncoming;
         await Chat.InitializeAsync();
         _feed = Chat.Feed.ToList();
+        _replay = new Services.ReplayMessages(Chat);
     }
 
     private async Task Send()
@@ -73,17 +81,38 @@
         if (e.Key is "Enter") _ = Send();
     }
 
-    private void OnIncoming(WAFlow.Chat.Models.Message m)
+    private void OnIncoming(Models.Message m)
     {
         _feed.Add(m);
         InvokeAsync(StateHasChanged);
     }
     
-    public void Dispose() => Chat.OnMessage -= OnIncoming;
+    private async Task OnImportReplay(InputFileChangeEventArgs e)
+    {
+        Console.WriteLine("entra a import");
+        if (_replay is null) return;
+        using var stream = e.File.OpenReadStream(20_000_000);
+        await _replay.StartFromStreamAsync(stream, new Services.ReplayOptions
+        {
+            GateOnReply = true,        
+            ReplyTimeoutMs = 20000,    
+            RespectUserGaps = false,   
+            Speed = 1.0
+        });
+    }
+
+
+    public void Dispose()
+    {
+        Chat.OnMessage -= OnIncoming;
+        _ = _replay?.DisposeAsync();
+    } 
 }
 
 <style>
 * { box-sizing: border-box; }
+
+.file-hidden { display: none; }
 
 .chat-wrap {
   max-width: 820px;
@@ -194,8 +223,13 @@ h1 {
   text-decoration: none;
   color: #1f2328;                   
   background: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 .btn-secondary:hover {
   background: #fafafa;
+    cursor: pointer;
 }
 </style>

@@ -4,6 +4,8 @@ using WAFlow.Chat.Components;
 using WAFlow.Chat.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 //simulator url
 var baseUrl = builder.Configuration["Simulator:BaseUrl"] ?? "http://localhost:5080";
 
