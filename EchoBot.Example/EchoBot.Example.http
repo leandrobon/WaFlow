@@ -1,0 +1,6 @@
+@EchoBot.Example_HostAddress = http://localhost:5254
+
+GET {{EchoBot.Example_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
