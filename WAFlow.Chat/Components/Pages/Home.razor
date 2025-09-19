@@ -4,9 +4,11 @@
 
 
 <div class="chat-wrap">
-    <h1>WaFlow Chat</h1>
-    <div class="status-banner @(_online ? "online" : "offline")">
+    <div class="header">
+        <h1>WaFlow Chat</h1>
+        <span class="status-pill @(_online ? "online" : "offline")">
         @(_online ? "Simulator ONLINE" : "Simulator OFFLINE — reconnecting…")
+    </span>
     </div>
     <div class="chatbox">
         @foreach (var m in _feed)
@@ -46,15 +48,15 @@
                    accept=".json" />
     </div>
 
-    <div class="logs">
-        <div class="logs-header">Logs</div>
+    <details class="logs">
+        <summary>Logs</summary>
         <div class="logs-body">
             @foreach (var line in Enumerable.Reverse(_logs))
             {
                 <div class="log-line">@line</div>
             }
         </div>
-    </div>
+    </details>
         
 </div>
 
@@ -177,7 +179,32 @@
   overflow: auto;
   padding: 12px;
 }
+.header{
+    background:#343a40; 
+    color:#fff; 
+    padding:10px 14px; 
+    border-radius:8px;
+    display:flex; 
+    align-items:center; 
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+.header h1{ 
+    margin:0; 
+    color:#fff; 
+    font-size:clamp(22px,3vw,32px); 
+    font-weight:800; 
+}
 
+.status-pill{
+    display:inline-block; 
+    border-radius:9999px; 
+    padding:4px 10px; 
+    font-weight:600;
+    background:rgba(255,255,255,0.15);
+}
+.status-pill.online{ border:1px solid rgba(0,0,0,0.1); }
+.status-pill.offline{ background:rgba(255,255,255,0.1); }
 h1 {
     text-align: center;
     margin: 12px auto 16px;
@@ -263,21 +290,35 @@ h1 {
   gap: 8px;
 }
 
-.btn-secondary {
-  display: inline-block;
-  padding: 8px 12px;
-  border: 1px solid #e6e6e8;        
-  border-radius: 10px;
-  text-decoration: none;
-  color: #1f2328;                   
-  background: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
+.btn-secondary{
+    display:inline-block;
+    padding:8px 12px;
+    border:1px solid #adb5bd;
+    border-radius:10px;
+    text-decoration:none;
+    color:#fff;
+    background:#adb5bd;
+    font:500 14px/1.4 inherit;
+    transition:filter .15s ease;
 }
-.btn-secondary:hover {
-  background: #fafafa;
-    cursor: pointer;
+.btn-secondary:hover{ filter:brightness(0.95); cursor:pointer; }
+
+.logs{ margin-top:12px; }
+.logs summary{
+    cursor:pointer;
+    font-weight:600;
+}
+.logs-body{
+    border:1px solid #e6e6e8; 
+    border-radius:10px; 
+    padding:8px; 
+    margin-top:8px;
+    max-height:180px; 
+    overflow:auto; 
+    background:#fff;
+}
+.log-line{ 
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; 
+    font-size:12px; 
 }
 </style>
