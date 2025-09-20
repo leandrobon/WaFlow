@@ -42,13 +42,13 @@ public sealed class WebhookRegisterHostedService : IHostedService
             using var resp = await client.PostAsync(url, content, ct);
 
             if (resp.IsSuccessStatusCode)
-                _logger.LogInformation("Webhook registered OK ({Status}) en {Url}", (int)resp.StatusCode, url);
+                _logger.LogInformation("Webhook registered OK ({Status}) on {Url}", (int)resp.StatusCode, url);
             else
-                _logger.LogWarning("Registro webhook FAIL ({Status}) en {Url}", (int)resp.StatusCode, url);
+                _logger.LogWarning("Webhook registered FAIL ({Status}) on {Url}", (int)resp.StatusCode, url);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error registrando el webhook");
+            _logger.LogError(ex, "Error registering webhook");
         }
     }
 

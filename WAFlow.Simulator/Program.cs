@@ -18,9 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRegistry, InMemoryRegistry>();
 builder.Services.AddSingleton<IMessageStore>(sp => new InMemoryMessageStore(maxMessages: 5000));
-// HttpClient factory para el dispatcher
+// HttpClient factory for dispatcher
 builder.Services.AddHttpClient();
-// Dispatcher (puede ser singleton: usa IHttpClientFactory)
+// Dispatcher 
 builder.Services.AddSingleton<IWebhookDispatcher, WebhookDispatcher>();
 
 builder.Services.ConfigureHttpJsonOptions(opt =>
@@ -70,7 +70,7 @@ app.MapPost("/simulate/user",
 {
     var logger = lf.CreateLogger("SimulateUser");
 
-    // Construimos el mensaje "inbound"
+    // Build inbound message
     var msg = new Message
     {
         Id = Guid.NewGuid().ToString(),
@@ -84,10 +84,10 @@ app.MapPost("/simulate/user",
 
     store.Add(msg);
 
-    // Emitimos en tiempo real para la futura UI
+    // Emit in real time for ui(not in use yet)
     await hub.Clients.All.SendAsync("message", msg, ct);
 
-    // Enviamos al webhook del bot si hay registro
+    // Send to webhook if registered
     var reg = registry.Get();
     if (reg is null)
     {
@@ -120,7 +120,7 @@ app.MapPost("/simulate/user",
 })
 .Produces(StatusCodes.Status202Accepted);
 
-// 3) Mensaje saliente del bot hacia el usuario
+// 3) Outbound message from bot to user
 app.MapPost("/messages",
     async (BotSendText input,
            IMessageStore store,
@@ -145,7 +145,7 @@ app.MapPost("/messages",
 })
 .Produces<Message>(StatusCodes.Status200OK);
 
-// --- READ/RESET utils (3.5) ---
+// --- READ/RESET utils ---
 
 // List messages userId=user-001)
 app.MapGet("/messages", (IMessageStore store, string? userId) =>

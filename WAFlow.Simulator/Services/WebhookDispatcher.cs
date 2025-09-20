@@ -38,7 +38,7 @@ public sealed class WebhookDispatcher: IWebhookDispatcher
                 Content = content
             };
 
-            // Header simple de autenticación (v0). Más adelante: firma HMAC.
+            // Simple auth header. Later maybe HMAC signature
             if (!string.IsNullOrWhiteSpace(registration.Secret))
             {
                 req.Headers.Add("X-WAFlow-Secret", registration.Secret);

@@ -28,7 +28,7 @@ var app = builder.Build();
 app.MapPost("/bot/webhook",
     async (WebhookDelivery delivery, IWhatsAppClient wa, IBotEngine engine, IConfiguration cfg, HttpRequest req, CancellationToken ct) =>
     {
-        // (opcional) validar secret
+        // 
         var expected = cfg["WAFlowBot:Secret"];
         if (!string.IsNullOrEmpty(expected))
         {
