@@ -8,6 +8,12 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "5080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:8080/healthz" ]
+      interval: 2s
+      timeout: 1s
+      retries: 30 
+      
 
   ui:
     build: ./WAFlow.Chat
@@ -30,4 +36,5 @@ services:
     ports:
       - "5199:8080"
     depends_on:
-      - sim
+      sim:
+        condition: service_healthy
