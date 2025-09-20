@@ -189,7 +189,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors("ui-dev");
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Run();
 

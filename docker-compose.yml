@@ -1,0 +1,33 @@
+﻿version: "3.9"
+
+services:
+  sim:
+    build: ./WAFlow.Simulator
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "5080:8080"
+
+  ui:
+    build: ./WAFlow.Chat
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Production
+      Simulator__BaseUrl: http://sim:8080
+    ports:
+      - "5056:8080"
+    depends_on:
+      - sim
+
+  echobot:
+    build: ./EchoBot.Example
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Production
+      WAFlowBot__SimulatorBaseUrl: http://sim:8080
+      WAFlowBot__MyWebhookUrl:     http://echobot:8080/bot/webhook
+    ports:
+      - "5199:8080"
+    depends_on:
+      - sim

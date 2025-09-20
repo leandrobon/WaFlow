@@ -35,7 +35,7 @@ app.MapPost("/bot/webhook",
             req.Headers.TryGetValue("X-WAFlow-Secret", out var got);
             if (got.Count == 0 || got[0] != expected)
             {
-                // seguimos en v0, pero lo registramos
+                // still v0, but we register
                 app.Logger.LogWarning("X-WAFlow-Secret inválido o ausente");
             }
         }
