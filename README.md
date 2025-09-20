@@ -119,7 +119,7 @@ curl -X DELETE "http://localhost:5080/webhook"
 
 ## Short roadmap
 1) **SignalR** for real-time feed and events (`messageAdded`, `messagesCleared`).
-2) **User selector** (E.164) with per-user feeds.
+2) **User selector** with per-user feeds.
 3) **Richer message types** (image, buttons, lists) + basic UI rendering.
 4) **CLI replay runner** (execute N transcripts and compare outputs).
 5) **Per-user webhooks** + HMAC signing and retries.
