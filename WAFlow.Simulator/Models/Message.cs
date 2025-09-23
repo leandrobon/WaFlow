@@ -24,4 +24,6 @@ public sealed class Message
 
     [Required, JsonPropertyName("timestamp")]
     public required DateTimeOffset Timestamp { get; init; }
+    //Use it to identify message sequences in CLI replays.
+    public long Seq { get; set; }
 }

@@ -148,13 +148,27 @@ app.MapPost("/messages",
 // --- READ/RESET utils ---
 
 // List messages userId=user-001)
-app.MapGet("/messages", (IMessageStore store, string? userId) =>
-    {
-        var msgs = string.IsNullOrWhiteSpace(userId)
-            ? store.GetAll()
-            : store.GetByUser(userId);
-        return Results.Ok(msgs);
-    })
+app.MapGet("/messages",
+        ([FromServices] IMessageStore store,
+            [FromQuery] string? userId,
+            [FromQuery] long? sinceSeq) =>
+        {
+            if (sinceSeq.HasValue && !string.IsNullOrWhiteSpace(userId))
+            {
+                var msgs = store.GetSince(userId!, sinceSeq.Value);
+                return Results.Ok(msgs);
+            }
+
+            if (sinceSeq.HasValue)
+            {
+                var msgs = store.GetSince(sinceSeq.Value);
+                return Results.Ok(msgs);
+            }
+
+            // if no seq num given return all
+            var all = string.IsNullOrWhiteSpace(userId) ? store.GetAll() : store.GetByUser(userId!);
+            return Results.Ok(all);
+        })
     .Produces<IEnumerable<Message>>(StatusCodes.Status200OK);
 
 app.MapDelete("/messages", (IMessageStore store) =>

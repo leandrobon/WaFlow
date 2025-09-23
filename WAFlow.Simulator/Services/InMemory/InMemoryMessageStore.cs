@@ -8,14 +8,21 @@ public sealed class InMemoryMessageStore : IMessageStore
     private readonly List<Message> _messages = new();
     private readonly object _sync = new();
     private readonly int _maxMessages;
+    private long _seq = 0;
 
     public InMemoryMessageStore(int maxMessages = 5000)
     {
         _maxMessages = maxMessages;
     }
+    
+    public long LastSeq => Interlocked.Read(ref _seq);
 
     public void Add(Message message)
     {
+        
+        var next = Interlocked.Increment(ref _seq);
+        message.Seq = next;
+        
         lock (_sync)
         {
             _messages.Add(message);
@@ -46,6 +53,22 @@ public sealed class InMemoryMessageStore : IMessageStore
                             || string.Equals(m.To,   userId, StringComparison.OrdinalIgnoreCase))
                 .ToArray();
         }
+    }
+    
+    public IReadOnlyList<Message> GetSince(long seq)
+    {
+        lock (_sync)
+            return _messages
+                .Where(m => m.Seq > seq)
+                .ToList();
+    }
+    
+    public IReadOnlyList<Message> GetSince(string userId, long seq)
+    {
+        lock (_sync)
+            return _messages
+                .Where(m => m.Seq > seq && (m.From == userId || m.To == userId))
+                .ToList();
     }
 
     public void Clear()
