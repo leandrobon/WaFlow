@@ -14,6 +14,11 @@ Chat in the browser UI, see your webhook get hit instantly, and use conversation
 
 ---
 
+## Example 
+![WAFlow](docs/assets/waflowDemoGif.gif)
+
+---
+
 ## Architecture
 ```
 ./WAFlow.Simulator   → Minimal API (.NET): inject user messages, dispatch webhooks, store feed
