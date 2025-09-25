@@ -176,6 +176,13 @@
 }
 
 <style>
+    /* Added body selector for global styles */
+    body {
+        background-color: #111111;
+        color: #f0f0f0;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
     * {
         box-sizing: border-box;
     }
@@ -191,8 +198,8 @@
     }
 
     .chatbox {
-        background: #f7f7f8;
-        border: 1px solid #e6e6e8;
+        background: #1c1c1c; /* Darker background for chatbox */
+        border: 1px solid #333; /* Subtle border */
         border-radius: 16px;
         height: 60vh;
         min-height: 360px;
@@ -201,7 +208,7 @@
     }
 
     .header {
-        background: #343a40;
+        background: #202020; /* Consistent dark header */
         color: #fff;
         padding: 10px 14px;
         border-radius: 8px;
@@ -223,15 +230,16 @@
         border-radius: 9999px;
         padding: 4px 10px;
         font-weight: 600;
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.1);
+        border: none; /* Removed border */
     }
 
     .status-pill.online {
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        /* No specific change needed, inherits from .status-pill */
     }
 
     .status-pill.offline {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05); /* Slightly dimmer for offline */
     }
 
     h1 {
@@ -241,7 +249,7 @@
         line-height: 1.15;
         font-weight: 800;
         letter-spacing: -0.01em;
-        color: #1f2328;
+        color: #f0f0f0; /* Light text color */
     }
 
 
@@ -264,22 +272,22 @@
         padding: 10px 12px;
         border-radius: 14px;
         line-height: 1.35;
-        color: #1f2328;
+        color: #f0f0f0; /* Light text color */
         position: relative;
-        border: 1px solid #e8e8ee;
-        background: #ffffff;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+        border: 1px solid #333;
+        background: #2a2a2a; /* Dark bubble */
+        box-shadow: none; /* Removed shadow */
     }
 
     .row.user .bubble {
-        background: #dcf3ff;
-        border-color: #b6e6ff;
+        background: #003d7a; /* A dark blue for user distinction */
+        border-color: #0052a3;
     }
 
     /* Timestamp */
     .meta {
         font-size: 12px;
-        color: #6b7280;
+        color: #888; /* Muted gray for metadata */
         margin-top: 6px;
         text-align: right;
     }
@@ -295,24 +303,27 @@
         flex: 1;
         height: 42px;
         padding: 0 12px;
-        border: 1px solid #e6e6e8;
+        border: 1px solid #444; /* Darker border */
         border-radius: 12px;
         outline: none;
+        background: #2a2a2a; /* Dark input background */
+        color: #f0f0f0; /* Light text color */
     }
 
     .textinput:focus {
-        border-color: #9cc9ff;
-        box-shadow: 0 0 0 3px rgba(80, 140, 255, 0.15);
+        border-color: #2deba8; /* Green accent color on focus */
+        box-shadow: 0 0 0 3px rgba(45, 235, 168, 0.25); /* Green glow */
     }
 
     .btn-send {
         height: 42px;
         padding: 0 16px;
-        border: 1px solid #2563eb;
-        background: #2563eb;
-        color: #fff;
+        border: 1px solid #2deba8; /* Green accent color */
+        background: #2deba8; /* Green accent color */
+        color: #111; /* Dark text for contrast */
         border-radius: 12px;
         cursor: pointer;
+        font-weight: 600; /* Bolder text */
     }
 
     .btn-send[disabled] {
@@ -329,11 +340,11 @@
     .btn-secondary {
         display: inline-block;
         padding: 8px 12px;
-        border: 1px solid #adb5bd;
+        border: 1px solid #555; /* Dark border */
         border-radius: 10px;
         text-decoration: none;
-        color: #fff;
-        background: #adb5bd;
+        color: #f0f0f0; /* Light text */
+        background: #333; /* Dark gray background */
         font: 500 14px/1.4 inherit;
         transition: filter .15s ease;
         cursor: pointer;
@@ -356,18 +367,19 @@
     }
 
     .logs-body {
-        border: 1px solid #e6e6e8;
+        border: 1px solid #333; /* Dark border */
         border-radius: 10px;
         padding: 8px;
         margin-top: 8px;
         max-height: 180px;
         overflow: auto;
-        background: #fff;
+        background: #2a2a2a; /* Dark background */
     }
 
     .log-line {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 12px;
+        color: #ccc; /* Light gray for log text */
     }
 
     #blazor-error-ui { display: none !important; }
