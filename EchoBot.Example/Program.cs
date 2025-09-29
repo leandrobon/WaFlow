@@ -19,7 +19,9 @@ builder.Services.Configure<BotOptions>(builder.Configuration.GetSection("WAFlowB
 builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IWhatsAppClient, SimulatorClient>();
-builder.Services.AddSingleton<IBotEngine, EchoEngine>(); // to use ai, change to llmEngine
+builder.Services.AddHttpClient(nameof(GeminiClient));
+builder.Services.AddSingleton<GeminiClient>();
+builder.Services.AddSingleton<IBotEngine, LlmEngine>(); // to use echo bot, change to echoEngine
 builder.Services.AddHostedService<WebhookRegisterHostedService>();
 
 var app = builder.Build();
