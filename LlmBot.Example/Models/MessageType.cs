@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EchoBot.Example.Models;
+namespace LlmBot.Example.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum MessageType

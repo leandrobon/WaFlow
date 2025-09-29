@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace EchoBot.Example.Models;
+namespace LlmBot.Example.Models;
 
 public sealed class WebhookDelivery
 {

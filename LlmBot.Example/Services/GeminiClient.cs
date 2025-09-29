@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace EchoBot.Example.Services;
+namespace LlmBot.Example.Services;
 
 public sealed class GeminiClient
 {

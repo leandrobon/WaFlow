@@ -1,4 +1,4 @@
-﻿namespace EchoBot.Example.Services;
+﻿namespace LlmBot.Example.Services;
 
 public interface IWhatsAppClient
 {

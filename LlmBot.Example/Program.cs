@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using EchoBot.Example.Models;
-using EchoBot.Example.Options;
-using EchoBot.Example.Services;
+using LlmBot.Example.Models;
+using LlmBot.Example.Options;
+using LlmBot.Example.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

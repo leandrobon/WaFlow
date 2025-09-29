@@ -1,6 +1,6 @@
 ﻿# WAFlow (MVP)
 
-**A minimal local sandbox to build and test webhook-based WhatsApp-like bots.**
+**A minimal local sandbox to build and test webhook-based chatbots.**
 
 Stop waiting for deployments. WAFlow lets you spin up a complete local environment with one command.
 Chat in the browser UI, see your webhook get hit instantly, and use conversation replay for lightning-fast regression testing.
@@ -23,27 +23,29 @@ Chat in the browser UI, see your webhook get hit instantly, and use conversation
 ```
 ./WAFlow.Simulator   → Minimal API (.NET): inject user messages, dispatch webhooks, store feed
 ./WAFlow.Chat          → Blazor UI: chat (polling), export/import, reset, online banner
-./EchoBot.Example     → Example webhook (Minimal API): echoes inbound text
+./LlmBot.Example     → Example Bot with LLM: Receives a webhook and answers using Gemini
 ./docker-compose.yml
 ```
 
-**Ports (host & local dev):** UI `5056`, Simulator `5080`, Echobot `5199`.
+**Ports (host & local dev):** UI `5056`, Simulator `5080`, LlmBot `5199`.
 
 > In Docker, services talk to each other via service DNS on port 8080:
-> `http://sim:8080` and `http://echobot:8080`.
+> `http://sim:8080` and `http://llmbot:8080`.
 
 ---
 
 ## Requirements
 - Docker Desktop
 - (Optional) .NET 8 SDK if you want to run without Docker
-
+- (Optional, only to use the example LlmBot) Gemini Api key
 ---
 
-## Quickstart (60s)
+## Quickstart 
 ```bash
 git clone <your-repo>.git waflow
 cd waflow
+# create .env 
+echo "GOOGLE_API_KEY=your_gemini_key" > .env
 docker compose up -d --build
 ```
 
@@ -51,36 +53,16 @@ Open **http://localhost:5056/** and start chatting.
 Tail logs:
 ```bash
 docker compose logs -f sim
-docker compose logs -f echobot
+docker compose logs -f llmbot
 
 ```
 
 The UI shows **ONLINE** when the simulator is healthy. You can **Export**, **Import**, and **Reset** from the UI.
 
----
-
-## Run without Docker
-Run three terminals:
-
-**1) Simulator**
-```bash
-cd WAFlow.Simulator
-dotnet run --urls http://localhost:5080
-```
-
-**2) Echobot (example)**
-```bash
-cd EchoBot.Example
-dotnet run --urls http://localhost:5199
-```
-
-**3) UI**
-```bash
-cd WAFlow.Chat
-dotnet run --urls http://localhost:5056
-```
+If the UI shows OFFLINE, ensure sim is healthy and that the bot registered its webhook (see logs of sim and llmbot).
 
 ---
+
 
 ## Replay a JSON transcript
 **From the UI:** click **Import** and choose a previously exported `.json` transcript.
@@ -91,12 +73,12 @@ dotnet run --urls http://localhost:5056
 ## Hook up your webhook
 
 **A) Auto-register (Docker) — recommended**
-In docker-compose.yml, the Echobot self-registers on startup:
+In docker-compose.yml, the llmbot self-registers on startup:
 ```yaml
-echobot:
+llmbot:
   environment:
     WAFlowBot__SimulatorBaseUrl: http://sim:8080
-    WAFlowBot__MyWebhookUrl:     http://echobot:8080/bot/webhook
+    WAFlowBot__MyWebhookUrl:     http://llmbot:8080/bot/webhook
 ```
 **B) Manual register (any environment)**
 ```bash
@@ -137,8 +119,8 @@ curl -X DELETE "http://localhost:5080/webhook"
 
 ## Troubleshooting
 - **UI shows OFFLINE** → check docker compose logs -f sim and verify Simulator__BaseUrl (http://sim:8080 in Docker, http://localhost:5080 locally).
-- **Webhook not receiving** → verify it’s stored (GET /webhook) or (re)register via POST /webhook/register. In Docker the URL must be http://echobot:8080/bot/webhook.
-- **Inter-service calls** → never use localhost between containers; use sim:8080 and echobot:8080.
+- **Webhook not receiving** → verify it’s stored (GET /webhook) or (re)register via POST /webhook/register. In Docker the URL must be http://llmbot:8080/bot/webhook.
+- **Inter-service calls** → never use localhost between containers; use sim:8080 and llmbot:8080.
 ---
 
 ## License

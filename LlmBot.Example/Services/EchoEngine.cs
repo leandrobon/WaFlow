@@ -1,6 +1,6 @@
-﻿using EchoBot.Example.Models;
+﻿using LlmBot.Example.Models;
 
-namespace EchoBot.Example.Services;
+namespace LlmBot.Example.Services;
 
 public sealed class EchoEngine : IBotEngine
 {

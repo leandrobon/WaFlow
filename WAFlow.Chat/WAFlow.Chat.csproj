@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EchoBot.Example\EchoBot.Example.csproj" />
+      <ProjectReference Include="..\LlmBot.Example\LlmBot.Example.csproj" />
       <ProjectReference Include="..\WAFlow.Simulator\WAFlow.Simulator.csproj" />
     </ItemGroup>
 

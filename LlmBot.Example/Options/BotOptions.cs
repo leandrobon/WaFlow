@@ -1,4 +1,4 @@
-﻿namespace EchoBot.Example.Options;
+﻿namespace LlmBot.Example.Options;
 
 public sealed class BotOptions
 {

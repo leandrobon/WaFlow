@@ -1,11 +1,11 @@
 ﻿using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using EchoBot.Example.Models;
-using EchoBot.Example.Options;
+using LlmBot.Example.Models;
+using LlmBot.Example.Options;
 using Microsoft.Extensions.Options;
 
-namespace EchoBot.Example.Services;
+namespace LlmBot.Example.Services;
 
 public sealed class SimulatorClient : IWhatsAppClient
 {
