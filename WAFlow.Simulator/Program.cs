@@ -91,7 +91,7 @@ app.MapPost("/simulate/user",
     var reg = registry.Get();
     if (reg is null)
     {
-        logger.LogInformation("No hay webhook registrado; no se despacha.");
+        logger.LogInformation("No webhook registered. Not delivered");
         return Results.Accepted(value: new { delivered = false, reason = "no_webhook_registered" });
     }
 

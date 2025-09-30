@@ -26,13 +26,13 @@ services:
     depends_on:
       - sim
 
-  chatbot:
-    build: ./EchoBot.Example
+  llmbot:
+    build: ./LlmBot.Example
     environment:
       ASPNETCORE_URLS: http://+:8080
       ASPNETCORE_ENVIRONMENT: Production
       WAFlowBot__SimulatorBaseUrl: http://sim:8080
-      WAFlowBot__MyWebhookUrl:     http://echobot:8080/bot/webhook
+      WAFlowBot__MyWebhookUrl:     http://llmbot:8080/bot/webhook
       WAFlowBot__BotId: ${WAFlowBot__BotId:-gemini}
       WAFlowBot__Gemini__ApiKey: ${GOOGLE_API_KEY}
       WAFlowBot__Gemini__Model: ${WAFlowBot__Gemini__Model:-gemini-2.5-flash}
