@@ -96,22 +96,19 @@ curl -X DELETE "http://localhost:5080/webhook"
 ---
 
 ## Limitations (MVP)
-- **No SignalR**: UI uses **polling** (no push updates yet).
 - **Single user** in the UI (no userId switcher).
 - **Text messages only** (model ready to expand to images/buttons/lists, not exposed yet).
 - **Single global webhook**, no auth.
-- **Export/Import schema v0** (may change slightly before v0.1).
 
 ---
 
 ## Short roadmap
-1) **SignalR** for real-time feed and events (`messageAdded`, `messagesCleared`).
-2) **User selector** with per-user feeds.
-3) **Richer message types** (image, buttons, lists) + basic UI rendering.
-4) **CLI replay runner** (execute N transcripts and compare outputs).
-5) **Per-user webhooks** + HMAC signing and retries.
-6) **Logs panel** in UI: delivered, retries, HTTP errors, reconnections.
-7) **Integration tests** and data fixtures.
+1) **User selector** with per-user feeds.
+2) **Richer message types** (image, buttons, lists) + basic UI rendering.
+3) **CLI replay runner** (execute N transcripts and compare outputs).
+4) **Per-user webhooks** + HMAC signing and retries.
+5) **Logs panel** in UI: delivered, retries, HTTP errors, reconnections.
+6) **Integration tests** and data fixtures.
 
 ---
 
