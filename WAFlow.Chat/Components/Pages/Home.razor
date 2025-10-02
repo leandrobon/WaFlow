@@ -176,7 +176,6 @@
 }
 
 <style>
-    /* Added body selector for global styles */
     body {
         background-color: #111111;
         color: #f0f0f0;
@@ -198,8 +197,8 @@
     }
 
     .chatbox {
-        background: #1c1c1c; /* Darker background for chatbox */
-        border: 1px solid #333; /* Subtle border */
+        background: #1c1c1c; 
+        border: 1px solid #333; 
         border-radius: 16px;
         height: 60vh;
         min-height: 360px;
@@ -208,7 +207,7 @@
     }
 
     .header {
-        background: #202020; /* Consistent dark header */
+        background: #202020; 
         color: #fff;
         padding: 10px 14px;
         border-radius: 8px;
@@ -231,15 +230,15 @@
         padding: 4px 10px;
         font-weight: 600;
         background: rgba(255, 255, 255, 0.1);
-        border: none; /* Removed border */
+        border: none; 
     }
 
     .status-pill.online {
-        /* No specific change needed, inherits from .status-pill */
+        
     }
 
     .status-pill.offline {
-        background: rgba(255, 255, 255, 0.05); /* Slightly dimmer for offline */
+        background: rgba(255, 255, 255, 0.05); 
     }
 
     h1 {
@@ -249,7 +248,7 @@
         line-height: 1.15;
         font-weight: 800;
         letter-spacing: -0.01em;
-        color: #f0f0f0; /* Light text color */
+        color: #f0f0f0; 
     }
 
 
@@ -272,22 +271,22 @@
         padding: 10px 12px;
         border-radius: 14px;
         line-height: 1.35;
-        color: #f0f0f0; /* Light text color */
+        color: #f0f0f0; 
         position: relative;
         border: 1px solid #333;
-        background: #2a2a2a; /* Dark bubble */
-        box-shadow: none; /* Removed shadow */
+        background: #2a2a2a; 
+        box-shadow: none; 
     }
 
     .row.user .bubble {
-        background: #003d7a; /* A dark blue for user distinction */
+        background: #003d7a; 
         border-color: #0052a3;
     }
 
     /* Timestamp */
     .meta {
         font-size: 12px;
-        color: #888; /* Muted gray for metadata */
+        color: #888; 
         margin-top: 6px;
         text-align: right;
     }
@@ -303,27 +302,27 @@
         flex: 1;
         height: 42px;
         padding: 0 12px;
-        border: 1px solid #444; /* Darker border */
+        border: 1px solid #444; 
         border-radius: 12px;
         outline: none;
-        background: #2a2a2a; /* Dark input background */
-        color: #f0f0f0; /* Light text color */
+        background: #2a2a2a; 
+        color: #f0f0f0; 
     }
 
     .textinput:focus {
-        border-color: #2deba8; /* Green accent color on focus */
-        box-shadow: 0 0 0 3px rgba(45, 235, 168, 0.25); /* Green glow */
+        border-color: #2deba8; 
+        box-shadow: 0 0 0 3px rgba(45, 235, 168, 0.25); 
     }
 
     .btn-send {
         height: 42px;
         padding: 0 16px;
-        border: 1px solid #2deba8; /* Green accent color */
-        background: #2deba8; /* Green accent color */
-        color: #111; /* Dark text for contrast */
+        border: 1px solid #2deba8; 
+        background: #2deba8; 
+        color: #111; 
         border-radius: 12px;
         cursor: pointer;
-        font-weight: 600; /* Bolder text */
+        font-weight: 600; 
     }
 
     .btn-send[disabled] {
@@ -340,11 +339,11 @@
     .btn-secondary {
         display: inline-block;
         padding: 8px 12px;
-        border: 1px solid #555; /* Dark border */
+        border: 1px solid #555; 
         border-radius: 10px;
         text-decoration: none;
-        color: #f0f0f0; /* Light text */
-        background: #333; /* Dark gray background */
+        color: #f0f0f0; 
+        background: #333; 
         font: 500 14px/1.4 inherit;
         transition: filter .15s ease;
         cursor: pointer;
@@ -367,19 +366,19 @@
     }
 
     .logs-body {
-        border: 1px solid #333; /* Dark border */
+        border: 1px solid #333; 
         border-radius: 10px;
         padding: 8px;
         margin-top: 8px;
         max-height: 180px;
         overflow: auto;
-        background: #2a2a2a; /* Dark background */
+        background: #2a2a2a; 
     }
 
     .log-line {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 12px;
-        color: #ccc; /* Light gray for log text */
+        color: #ccc; 
     }
 
     #blazor-error-ui { display: none !important; }

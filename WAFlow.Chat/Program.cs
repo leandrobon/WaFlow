@@ -8,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<SimulatorOptions>(
     builder.Configuration.GetSection("Simulator"));
+builder.Services
+    .AddServerSideBlazor()
+    .AddCircuitOptions(o => { o.DetailedErrors = true; });
+
+builder.Logging.AddFilter("Microsoft.AspNetCore.Components.Server.Circuits", LogLevel.Debug);
+builder.Logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Debug);
 
 builder.Services.AddHttpClient("sim", (sp, http) =>
 {
@@ -26,6 +32,16 @@ builder.Services.AddSingleton<IChatBackend, SimulatorHttpBackend>();
 
 var app = builder.Build();
 
+app.Use(async (ctx, next) =>
+{
+    try { await next(); }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[GLOBAL] Unhandled: {ex}");
+        throw;
+    }
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -34,7 +50,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 

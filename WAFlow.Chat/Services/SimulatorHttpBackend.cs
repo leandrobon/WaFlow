@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.SignalR.Client;
 using WAFlow.Chat.Models;
 
 namespace WAFlow.Chat.Services;
 
-// === DTOs del simulator ===
 internal sealed class TextBodyDto { [JsonPropertyName("body")] public string? Body { get; set; } }
 
 internal sealed class SimMessageDto
@@ -31,8 +31,13 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
     private readonly List<Message> _feed = new();
     private Timer? _timer;
     private int _lastCount = 0;
+    private HubConnection? _hub;  
     private bool _isOnline;
+    private bool _initialized;
+    private IDisposable? _messageSub;   // track subscription
+    private readonly HashSet<string> _seen = new(); // dedupe by message Id
 
+    
     // one unique simulated user for now
     private readonly string _userId = "user-001";
 
@@ -47,6 +52,7 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
 
     public async Task InitializeAsync(CancellationToken ct = default)
     {
+        if (_initialized) return;              
         try
         {
             var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json, ct)
@@ -63,8 +69,42 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
             IsOnline = false; 
         }
 
-        // light polling (later migrate to SignalR /stream)
-        _timer ??= new Timer(async _ => await Poll(), null, 400, 400);
+        var baseUri = _http.BaseAddress?.ToString().TrimEnd('/') ?? "http://localhost:5080";
+        var hubUrl  = $"{baseUri}/stream?userId={Uri.EscapeDataString(_userId)}";
+
+        _hub = new HubConnectionBuilder()
+            .WithUrl(hubUrl)
+            .WithAutomaticReconnect()
+            .Build();
+
+        _hub.Reconnecting += _ => { if (IsOnline) IsOnline = false; return Task.CompletedTask; };
+        _hub.Reconnected  += _ => { if (!IsOnline) IsOnline = true; return Task.CompletedTask; };
+        _hub.Closed       += _ => { if (IsOnline) IsOnline = false; return Task.CompletedTask; };
+
+        _messageSub?.Dispose();
+        _messageSub = _hub.On<SimMessageDto>("message", d =>
+        {
+            if (!string.IsNullOrEmpty(d.Id) && !_seen.Add(d.Id)) return; // dedupe live
+            var m = Map(d);
+            _feed.Add(m);
+            OnMessage?.Invoke(m);
+        });
+
+
+        try
+        {
+            Console.WriteLine($"[Hub] Connecting to {hubUrl}");
+            await _hub.StartAsync(ct);
+            IsOnline = true;
+            Console.WriteLine("[Hub] Connected");
+            await _hub.InvokeAsync("Join", _userId, ct);
+            Console.WriteLine($"[Hub] Joined group: {_userId}");
+        }
+        catch(Exception ex)
+        {
+            IsOnline = false;
+            Console.WriteLine($"[Hub] Connect ERROR: {ex.Message}");
+        }
     }
 
     public async Task SendFromUserAsync(string text, CancellationToken ct = default)
@@ -75,33 +115,6 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
         var payload = new SimulateUserInputDto { UserId = _userId, Text = text };
         var resp = await _http.PostAsJsonAsync("/simulate/user", payload, _json, ct);
         resp.EnsureSuccessStatusCode();
-    }
-
-    private async Task Poll()
-    {
-        try
-        {
-            var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json)
-                       ?? new List<SimMessageDto>();
-
-            if (!IsOnline) IsOnline = true;
-
-            if (list.Count > _lastCount)
-            {
-                foreach (var d in list.Skip(_lastCount))
-                {
-                    var m = Map(d);
-                    _feed.Add(m);
-                    OnMessage?.Invoke(m);
-                }
-
-                _lastCount = list.Count;
-            }
-        }
-        catch
-        {
-            if (IsOnline) IsOnline = false;
-        }
     }
     
     public async Task ResetAsync(CancellationToken ct = default)
@@ -122,10 +135,10 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
         Timestamp = d.Timestamp.UtcDateTime
     };
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        _timer?.Dispose();
-        return ValueTask.CompletedTask;
+        _messageSub?.Dispose();
+        if (_hub is not null) { try { await _hub.DisposeAsync(); } catch { } }
     }
     
     public bool IsOnline

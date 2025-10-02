@@ -42,8 +42,9 @@ builder.Services.AddCors(o =>
         .AllowCredentials());
 });
 
-var app = builder.Build();
+var app = builder.Build(); 
 
+app.UseCors("ui-dev");
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -85,7 +86,7 @@ app.MapPost("/simulate/user",
     store.Add(msg);
 
     // Emit in real time for ui(not in use yet)
-    await hub.Clients.All.SendAsync("message", msg, ct);
+    await hub.Clients.Group(input.UserId).SendAsync("message", msg, ct);
 
     // Send to webhook if registered
     var reg = registry.Get();
@@ -139,7 +140,7 @@ app.MapPost("/messages",
     };
 
     store.Add(msg);
-    await hub.Clients.All.SendAsync("message", msg, ct);
+    await hub.Clients.Group(input.To).SendAsync("message", msg, ct);
 
     return Results.Ok(msg);
 })
@@ -200,7 +201,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors("ui-dev");
 }
 
 //app.UseHttpsRedirection();
