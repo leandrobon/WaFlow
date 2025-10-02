@@ -93,7 +93,8 @@ License: MIT
         if (msg.Text?.Body is null) return null;
 
         var systemPrompt = _cfg["WAFlowBot:Gemini:SystemPrompt"]
-                           ?? "You are a concise, helpful WhatsApp-style assistant." + _waFlowContext;
+                           ?? "You are a concise, helpful WhatsApp-style assistant. Allowed characters: letters, numbers, spaces, and the punctuation . , ? ! ' \" ( ) - : ;\nForbidden: any Markdown or special symbols such as * _ ~ \\ # > [ ] { } | / ` or emoji.\nDo not add headings, bullet points, emphasis, code fences, or decorative characters.\nOutput a single line unless the user content already contains line breaks—preserve them, but do not add new ones.\n." 
+                           + _waFlowContext;
 
         return await _gemini.GenerateAsync(systemPrompt, msg.Text.Body, ct);
     }
