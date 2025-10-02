@@ -15,7 +15,7 @@ Chat in the browser UI, see your webhook get hit instantly, and use conversation
 ---
 
 ## Example 
-![WAFlow](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExemZubDdheDUwOGl3NWtldjJqN2dyMTRlbW95Mnl5eHRxZmJ1ZW5zcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zWKncOGAtIb99Nbkdp/giphy.gif)
+![WAFlow](docs/assets/waflowDemoGif.gif)
 
 ---
 
