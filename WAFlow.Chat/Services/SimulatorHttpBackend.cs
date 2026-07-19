@@ -29,9 +29,7 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
     private readonly HttpClient _http;
     private readonly JsonSerializerOptions _json;
     private readonly List<Message> _feed = new();
-    private Timer? _timer;
-    private int _lastCount = 0;
-    private HubConnection? _hub;  
+    private HubConnection? _hub;
     private bool _isOnline;
     private bool _initialized;
     private IDisposable? _messageSub;   // track subscription
@@ -52,7 +50,12 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
 
     public async Task InitializeAsync(CancellationToken ct = default)
     {
-        if (_initialized) return;              
+        // Singleton backend: every circuit calls this, but the backfill and the hub
+        // connection must happen once. Set before the first await so two circuits
+        // starting at the same time cannot both get past the guard.
+        if (_initialized) return;
+        _initialized = true;
+
         try
         {
             var list = await _http.GetFromJsonAsync<List<SimMessageDto>>($"/messages?userId={_userId}", _json, ct)
@@ -60,9 +63,8 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
 
             _feed.Clear();
             foreach (var d in list) _feed.Add(Map(d));
-            _lastCount = _feed.Count;
 
-            IsOnline = true; 
+            IsOnline = true;
         }
         catch
         {
@@ -124,7 +126,6 @@ public sealed class SimulatorHttpBackend : IChatBackend, IAsyncDisposable
 
         // clean local state so nothing reappears
         _feed.Clear();
-        _lastCount = 0;
     }
 
     private static Message Map(SimMessageDto d) => new()

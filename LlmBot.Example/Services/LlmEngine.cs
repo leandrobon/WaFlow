@@ -15,8 +15,11 @@ What it is
 - Conversation replay: export/import JSON transcripts for quick regression tests.
 
 Architecture
-- WAFlow.Simulator (.NET Minimal API): inject user messages, dispatch webhooks, store feed.
-- WAFlow.Chat (Blazor UI): polling chat, export/import, reset, online banner.
+- WAFlow.Simulator (.NET Minimal API): inject user messages, dispatch webhooks, store feed, SignalR hub at /stream.
+- WAFlow.Chat (Blazor Server UI): SignalR push chat, export/import, reset, online banner.
+  Two SignalR hops: browser <-> Blazor circuit <-> UI process <-> Simulator /stream hub.
+  No transport is pinned; both negotiate, so WebSockets in practice. No polling loop —
+  one GET /messages on startup to backfill, everything after that is pushed.
 - LlmBot.Example: sample bot using Gemini.
 - docker-compose orchestrates all.
 
@@ -57,20 +60,25 @@ Replay transcripts
 - Export from the UI to create test fixtures for regression.
 
 Limitations (MVP)
-- Polling UI (no SignalR push yet).
-- Single user feed in UI.
+- Single user feed in UI (shared singleton, fixed user-001).
 - Text messages only (models ready for richer types, not exposed).
-- Single global webhook, no auth.
+- Single global webhook. Auth is an optional shared secret sent as the X-WAFlow-Secret
+  header; there is no signing, and this example bot logs a mismatch but still processes
+  the message.
+- Webhook delivery is one attempt, fire-and-forget: no retry, no explicit timeout.
+  Failures are logged and reported in the /simulate/user response, not queued.
+- Payloads are WhatsApp-inspired but NOT Meta Cloud API compatible: no entry/changes/value
+  envelope, no hub.challenge verification, custom X-WAFlow-Secret instead of
+  X-Hub-Signature-256, ISO-8601 timestamps instead of Unix seconds.
 - Export/Import schema v0 (may change before v0.1).
 
 Short roadmap
-1) SignalR real-time feed/events.
-2) User selector (per-user feeds).
-3) Rich message types (image/buttons/lists) + basic rendering.
-4) CLI replay runner (batch transcripts + compare).
-5) Per-user webhooks, HMAC signing, retries.
-6) UI logs panel (deliveries/retries/errors).
-7) Integration tests & fixtures.
+1) User selector (per-user feeds).
+2) Rich message types (image/buttons/lists) + basic rendering.
+3) CLI replay runner (batch transcripts + compare).
+4) Per-user webhooks, HMAC signing, retries.
+5) Delivery detail in the UI logs panel (per-delivery status, retries, HTTP errors).
+6) Integration tests & fixtures.
 
 Troubleshooting
 - UI OFFLINE → check `docker compose logs -f sim` and base URLs 
